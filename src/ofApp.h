@@ -23,4 +23,10 @@ class ofApp : public ofBaseApp{
 		vector<vector<glm::vec3>> log_list;
 		vector<ofColor> color_list;
 		vector<float> life_list;
+
+		//Firelava\
+
+		ofMesh face,frame;
+		
+
 };
