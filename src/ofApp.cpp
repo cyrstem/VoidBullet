@@ -71,7 +71,7 @@ void ofApp::update(){
         ofSeedRandom(139);
         float phi_deg_step =15;
         float theta_deg_step = 5;
-        for (float radius = 130; radius <= 250; radius += 50) {
+        for (float radius = 130; radius <= 250; radius += 90) {
  
 		auto noise_seed = ofRandom(1000);
 		for (float phi_deg = 0; phi_deg < 360; phi_deg += phi_deg_step) {
@@ -153,15 +153,5 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
 
 }
