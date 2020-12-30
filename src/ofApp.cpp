@@ -15,8 +15,8 @@ void ofApp::setup(){
 
     //fireRays
     ofSetLineWidth(3);
-    noise_seed = glm::vec3(ofRandom(3000),ofRandom(1000),ofRandom(3000));
-    ofIcoSpherePrimitive ico_sphere = ofIcoSpherePrimitive(210,3);
+    noise_seed = glm::vec3(ofRandom(3000),ofRandom(3000),ofRandom(3000));
+    ofIcoSpherePrimitive ico_sphere = ofIcoSpherePrimitive(201,3);
     vector<ofMeshFace> triangles = ico_sphere.getMesh().getUniqueFaces();
     for (int i = 0; i < triangles.size(); i++)
     {
@@ -32,7 +32,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    spinY+=0.13;
+    spinY+=0.23;
     //fireRays
     int radius = 1;
         while (log_list.size() <550)        
@@ -41,7 +41,7 @@ void ofApp::update(){
             vector<glm::vec3> log;
             log.push_back(location_list[location_index]);
             log_list.push_back(log);
-            color_list.push_back(ofColor(ofRandom(39,139)));
+            color_list.push_back(ofColor(ofRandom(9,139)));
             life_list.push_back(170);
             
         }
@@ -69,7 +69,7 @@ void ofApp::update(){
         frame.clear();
 
         ofSeedRandom(139);
-        float phi_deg_step =5;
+        float phi_deg_step =15;
         float theta_deg_step = 5;
         for (float radius = 130; radius <= 250; radius += 50) {
  
@@ -82,7 +82,7 @@ void ofApp::update(){
 					sin(theta_deg * DEG_TO_RAD) * cos(phi_deg * DEG_TO_RAD),
 					sin(theta_deg * DEG_TO_RAD) * sin(phi_deg * DEG_TO_RAD),
 					cos(theta_deg * DEG_TO_RAD));
-				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.02));
+				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.01));
  
 				if (noise_value < 0.5) { continue; }
  
@@ -107,15 +107,12 @@ void ofApp::update(){
 					radius * cos((theta_deg + theta_deg_step * 0.5) * DEG_TO_RAD)));
  
 				this->face.addVertices(vertices);
-				this->frame.addVertices(vertices);
+			
  
 				this->face.addIndex(index + 0); this->face.addIndex(index + 1); this->face.addIndex(index + 3);
 				this->face.addIndex(index + 0); this->face.addIndex(index + 3); this->face.addIndex(index + 2);
  
-				this->frame.addIndex(index + 0); this->frame.addIndex(index + 1);
-				this->frame.addIndex(index + 0); this->frame.addIndex(index + 2);
-				this->frame.addIndex(index + 3); this->frame.addIndex(index + 1);
-				this->frame.addIndex(index + 3); this->frame.addIndex(index + 2);
+			
 			}
 		}
 	}
@@ -137,7 +134,7 @@ void ofApp::draw(){
 		ofFill();
 		ofDrawSphere(this->log_list[i].front(), 1);
  
-		auto alpha = this->life_list[i] > 60 ? 155 : ofMap(this->life_list[i], 0, 60, 0, 255);
+		auto alpha = this->life_list[i] > 60 ? 255 : ofMap(this->life_list[i], 0, 60, 0, 255);
 		ofSetColor(this->color_list[i], alpha);
  
 		ofNoFill();
@@ -147,7 +144,7 @@ void ofApp::draw(){
 	}
 
     
-    ofSetColor(ofColor::fromHsb(255,0,0));
+    ofSetColor(ofColor::fromHsb(255,10,6));
 	this->face.draw();
  
 
