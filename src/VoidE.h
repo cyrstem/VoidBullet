@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "ofMain.h"
-
+#include "ofxAutoReloadedShader.h"
 class VoidE{
     public:
         void init();
@@ -22,5 +22,9 @@ class VoidE{
 		//Firelava\
 
 		ofMesh face;
+        //shader 
+        ofxAutoReloadedShader blackShader;
+        ofTexture mtex;
+        float time;
 
 };

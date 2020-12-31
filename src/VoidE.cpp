@@ -1,6 +1,9 @@
 #include "VoidE.h"
 
 void VoidE::init(){
+    ofDisableArbTex();
+    ofLoadImage(mtex,"tex.jpg");
+    blackShader.load("void");
     //void sphere
     vacio.setPosition(0,0,0);
     vacio.setRadius(200);
@@ -18,7 +21,7 @@ void VoidE::init(){
         ofPoint average = (triangles[i].getVertex(0) +triangles[i].getVertex(1) + triangles[i].getVertex(2))/3;
         location_list.push_back(average);
     }
-
+    time =ofGetElapsedTimef();
 }
 
 void VoidE::update(){
@@ -109,10 +112,15 @@ void VoidE::update(){
 
 void VoidE::draw(){
      ofRotateYDeg(spinY);
-        ofPushStyle();
-        ofSetColor(ofColor::black);
-        vacio.draw();  
-        ofPopStyle();
+
+        //ofPushStyle();
+        //ofSetColor(ofColor::black);
+        blackShader.begin();
+        blackShader.setUniformTexture("tex0",mtex,0);
+        blackShader.setUniform1f("time",time);
+            vacio.draw();  
+        blackShader.end();
+        //ofPopStyle();
         for (int i = 0; i < this->log_list.size(); i++) {
  
 		ofSetColor(this->color_list[i]);

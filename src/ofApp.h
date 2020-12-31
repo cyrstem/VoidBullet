@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxAutoReloadedShader.h"
 #include "VoidE.h"
 
 class ofApp : public ofBaseApp{
