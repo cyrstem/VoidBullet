@@ -19,7 +19,7 @@ in vec2 v_texcoord;
 void main(){
  /* Normalize verts from the vertex shader */
     vec3 normal = normalize(verts.xyz);
-    vec3 imgColor = texture(tex0,v_texcoord).rgb;
+    vec3 imgColor = texture(tex0,v_texcoord).rgb /3.5;
 
      outputColor = vec4(imgColor, 1.0);
 }
