@@ -59,9 +59,9 @@ void main ()
     q.x = fbm( st + 0.05*time);
     q.y = fbm( st + vec2(1.0));
 
-    vec2 r = vec2(0.8);
-    r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 0.15*time );
-    r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 0.126*time);
+    vec2 r = vec2(1.8);
+    r.x = fbm( st + 1.0*q + vec2(1.7,9.2)+ 1.15*time );
+    r.y = fbm( st + 1.0*q + vec2(8.3,2.8)+ 1.16*time);
 
     float f = fbm(st+r);
 
@@ -75,7 +75,7 @@ void main ()
 
     color = mix(color,
                 vec3(1.0, 0.0314, 0.0),
-                clamp(length(r.x),0.0,1.0));
+                clamp(length(r.x),0.4,1.0));
 
    outputColor= vec4((f*f*f+.4*f*f+.5*f)*color,0.3999);
 

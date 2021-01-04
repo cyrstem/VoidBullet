@@ -3,8 +3,6 @@
 void VoidE::init(){
     ofDisableArbTex();
 	ofEnableDepthTest();
-	ofEnableSmoothing();
-	//ofEnableAlphaBlending();
 	ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
     ofLoadImage(mtex,"tex.jpg");
     blackShader.load("void");
@@ -35,6 +33,7 @@ void VoidE::init(){
 	f.internalformat =GL_RGBA;
 	f.maxFilter =32;
 	fireTexture.allocate(f);
+	
 }
 
 void VoidE::update(){
@@ -131,14 +130,14 @@ void VoidE::update(){
 void VoidE::draw(){
      ofRotateYDeg(spinY);
 
-        //ofPushStyle();
-        //ofSetColor(ofColor::black);
+ \
         blackShader.begin();
         blackShader.setUniformTexture("tex0",mtex,0);
         blackShader.setUniform1f("time",time);
             vacio.draw();  
         blackShader.end();
-        //ofPopStyle();
+
+
         for (int i = 0; i < this->log_list.size(); i++) {
  
 		ofSetColor(this->color_list[i]);
@@ -156,17 +155,22 @@ void VoidE::draw(){
 ///check how to render fbo to a texture or image and thenn pass to the shaderr
 
 	fireTexture.begin();
-		ofPopStyle();
-		ofFill();
-		ofDrawRectangle(0,0,300,300);
-		ofPushStyle();
-    fireTexture.end();
-
-	fireRing.begin();
+		fireRing.begin();
+		//ofPopStyle();
+		//ofFill();
+	
 		fireRing.setUniform1f("time",ofGetElapsedTimef());
 		fireRing.setUniform2f("resolution",300,300);
-			this->face.draw();
-	fireRing.end();
+			ofDrawRectangle(0,0,300,300);
+		fireRing.end();
+		//ofPushStyle();
+    fireTexture.end();
+	// fireRing.draw(0,0);
+
+			fireTexture.getTextureReference().bind();
+				this->face.draw();
+			fireTexture.getTextureReference().unbind();
+	//fireRing.end();
 		
 }
 
