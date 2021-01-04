@@ -2,8 +2,13 @@
 
 void VoidE::init(){
     ofDisableArbTex();
+	ofEnableDepthTest();
+	ofEnableSmoothing();
+	//ofEnableAlphaBlending();
+	ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
     ofLoadImage(mtex,"tex.jpg");
     blackShader.load("void");
+	fireRing.load("Fire");
     //void sphere
     vacio.setPosition(0,0,0);
     vacio.setRadius(200);
@@ -22,6 +27,14 @@ void VoidE::init(){
         location_list.push_back(average);
     }
     time =ofGetElapsedTimef();
+
+
+	ofFboSettings f;
+	f.width =300;
+	f.height =300;
+	f.internalformat =GL_RGBA;
+	f.maxFilter =32;
+	fireTexture.allocate(f);
 }
 
 void VoidE::update(){
@@ -34,7 +47,7 @@ void VoidE::update(){
             vector<glm::vec3> log;
             log.push_back(location_list[location_index]);
             log_list.push_back(log);
-            color_list.push_back(ofColor(ofRandom(9,139)));
+            color_list.push_back(ofColor(ofRandom(255,1)));
             life_list.push_back(170);
             
         }
@@ -74,7 +87,7 @@ void VoidE::update(){
 					sin(theta_deg * DEG_TO_RAD) * cos(phi_deg * DEG_TO_RAD),
 					sin(theta_deg * DEG_TO_RAD) * sin(phi_deg * DEG_TO_RAD),
 					cos(theta_deg * DEG_TO_RAD));
-				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.01));
+				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.021));
  
 				if (noise_value < 0.5) { continue; }
  
@@ -108,6 +121,11 @@ void VoidE::update(){
 			}
 		}
 	}
+
+	fireTexture.begin();
+	ofClear(0);
+	fireTexture.end();
+
 }
 
 void VoidE::draw(){
@@ -135,9 +153,20 @@ void VoidE::draw(){
 		ofVertices(this->log_list[i]);
 		ofEndShape();
 	}
+///check how to render fbo to a texture or image and thenn pass to the shaderr
 
-    
-    ofSetColor(ofColor::fromHsb(255,10,6));
-	this->face.draw();
+	fireTexture.begin();
+		ofPopStyle();
+		ofFill();
+		ofDrawRectangle(0,0,300,300);
+		ofPushStyle();
+    fireTexture.end();
+
+	fireRing.begin();
+		fireRing.setUniform1f("time",ofGetElapsedTimef());
+		fireRing.setUniform2f("resolution",300,300);
+			this->face.draw();
+	fireRing.end();
+		
 }
 

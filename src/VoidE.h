@@ -24,6 +24,8 @@ class VoidE{
 		ofMesh face;
         //shader 
         ofxAutoReloadedShader blackShader;
+		ofxAutoReloadedShader fireRing;
+		ofFbo fireTexture;
         ofTexture mtex;
         float time;
 
