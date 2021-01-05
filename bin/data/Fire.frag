@@ -77,7 +77,7 @@ void main ()
                 vec3(1.0, 0.0314, 0.0),
                 clamp(length(r.x),0.4,1.0));
 
-   outputColor= vec4((f*f*f+.4*f*f+.5*f)*color,0.3999);
+   outputColor= vec4((f*f*f+.4*f*f+.5*f)*color,0.3099);
 
 
 

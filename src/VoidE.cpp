@@ -88,7 +88,7 @@ void VoidE::update(){
 					sin(theta_deg * DEG_TO_RAD) * cos(phi_deg * DEG_TO_RAD),
 					sin(theta_deg * DEG_TO_RAD) * sin(phi_deg * DEG_TO_RAD),
 					cos(theta_deg * DEG_TO_RAD));
-				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.0021));
+				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.021));
  
 				if (noise_value < 0.5) { continue; }
  

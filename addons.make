@@ -1,2 +1,1 @@
 ofxAutoReloadedShader
-ofxDOF

@@ -6,33 +6,36 @@ void ofApp::setup(){
     ofSetBackgroundColor(ofColor::black);
     ofSetFrameRate(60);
     ofEnableDepthTest();
+    //ofEnableAntiAliasing();
     vacio.init();
-
-
- // set DOF parameters
-    depth.setup(ofGetWidth(), ofGetHeight());
-    focalDist = 1500;
-    focalRange = 1500;
-    cam.setPosition(0,0,1500);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
    
     vacio.update();
+
+    lightpos = glm::vec3(sin(ofGetElapsedTimef()/4.18f) * 150 * 0 + 0,
+     sin(ofGetElapsedTimef()/2.8f) * 150 * 2 + 0,
+     -cos(ofGetElapsedTimef()/2.8f) * 150 * 2 + 5);
+
+    light.setPosition(lightpos);
+
+  
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
    //ofBackgroundGradient(ofColor::fromHsb(0,122,33),ofColor::fromHsb(0,0,0),OF_GRADIENT_CIRCULAR);
-       
-//    depth.begin();
-    cam.begin();
    
+    cam.begin();
+       // light.enable();
         vacio.draw();
+       // light.disable();
+        light.draw();
 
     cam.end();
-   // depth.end();
+    
 }
 
 //--------------------------------------------------------------
