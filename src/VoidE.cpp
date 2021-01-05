@@ -1,12 +1,14 @@
 #include "VoidE.h"
 
 void VoidE::init(){
-    ofDisableArbTex();
-	ofEnableDepthTest();
-	ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
+     ofDisableArbTex();
+	 //ofEnableDepthTest();
+	 ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
     ofLoadImage(mtex,"tex.jpg");
+
     blackShader.load("void");
 	fireRing.load("Fire");
+
     //void sphere
     vacio.setPosition(0,0,0);
     vacio.setRadius(200);
@@ -32,7 +34,7 @@ void VoidE::init(){
 	f.height =300;
 	f.internalformat =GL_RGBA;
 	f.maxFilter =32;
-	fireTexture.allocate(f);
+	fboTexture.allocate(f);
 	
 }
 
@@ -51,7 +53,7 @@ void VoidE::update(){
             
         }
 
-        for (int i = this->log_list.size() - 1; i >= 0; i--) {
+        for (int i = this->log_list.size()-1; i >= 0; i--) {
  
 		this->life_list[i] -= 1;
 		if (this->life_list[i] < 0) {
@@ -63,9 +65,9 @@ void VoidE::update(){
 			continue;
 		}
  
-		auto x = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.x + ofGetFrameNum() * 0.005)), 0, 1, -15, 15);
-		auto y = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.y + ofGetFrameNum() * 0.005)), 0, 1, -15, 15);
-		auto z = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.z + ofGetFrameNum() * 0.005)), 0, 1, -15, 15);
+		auto x = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.x + 360 * 0.005)), 0, 1, -15, 15);
+		auto y = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.y + 360 * 0.005)), 0, 1, -15, 15);
+		auto z = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.z + 360 * 0.005)), 0, 1, -15, 15);
 		this->log_list[i].push_back(this->log_list[i].back() + glm::vec3(x, y, z));
 	}
         //firelava
@@ -73,11 +75,11 @@ void VoidE::update(){
         face.clear();
 
         ofSeedRandom(139);
-        float phi_deg_step =10;
-        float theta_deg_step = 6;
-        for (float radius = 150; radius <= 250; radius += 100) {
+        float phi_deg_step =1.5;
+        float theta_deg_step =1.5;
+        for (float radius = 110; radius <= 250; radius += 100) {
  
-		auto noise_seed = ofRandom(1000);
+		auto noise_seed = ofRandom(500);
 		for (float phi_deg = 0; phi_deg < 360; phi_deg += phi_deg_step) {
  
 			for (float theta_deg = 0; theta_deg < 360; theta_deg += theta_deg_step) {
@@ -86,7 +88,7 @@ void VoidE::update(){
 					sin(theta_deg * DEG_TO_RAD) * cos(phi_deg * DEG_TO_RAD),
 					sin(theta_deg * DEG_TO_RAD) * sin(phi_deg * DEG_TO_RAD),
 					cos(theta_deg * DEG_TO_RAD));
-				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.021));
+				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.0021));
  
 				if (noise_value < 0.5) { continue; }
  
@@ -121,56 +123,68 @@ void VoidE::update(){
 		}
 	}
 
-	fireTexture.begin();
+	fboTexture.begin();
 	ofClear(0);
-	fireTexture.end();
+	fboTexture.end();
 
 }
 
 void VoidE::draw(){
      ofRotateYDeg(spinY);
 
- \
+ //shader
+
         blackShader.begin();
-        blackShader.setUniformTexture("tex0",mtex,0);
-        blackShader.setUniform1f("time",time);
-            vacio.draw();  
+        	blackShader.setUniformTexture("tex0",mtex,0);
+    		blackShader.setUniform1f("time",time);
+            	vacio.draw();  
         blackShader.end();
 
-
+	fireRing.begin();
+		fireRing.setUniform1f("time",ofGetElapsedTimef());
+	 	fireRing.setUniform2f("resolution",300,300);
         for (int i = 0; i < this->log_list.size(); i++) {
  
 		ofSetColor(this->color_list[i]);
 		ofFill();
 		ofDrawSphere(this->log_list[i].front(), 1);
  
-		auto alpha = this->life_list[i] > 60 ? 255 : ofMap(this->life_list[i], 0, 60, 0, 255);
-		ofSetColor(this->color_list[i], alpha);
+		//auto alpha = this->life_list[i] > 360 ? 255 : ofMap(this->life_list[i], 0, 360, 0, 255);
+		//ofSetColor(this->color_list[i], alpha);
  
 		ofNoFill();
 		ofBeginShape();
 		ofVertices(this->log_list[i]);
 		ofEndShape();
 	}
-///check how to render fbo to a texture or image and thenn pass to the shaderr
 
-	fireTexture.begin();
-		fireRing.begin();
-		//ofPopStyle();
-		//ofFill();
-	
+	fireRing.end();
+
+
+///check how to render fbo to a texture or image and thenn pass to the shaderr
+	fireRing.begin();
 		fireRing.setUniform1f("time",ofGetElapsedTimef());
 		fireRing.setUniform2f("resolution",300,300);
-			ofDrawRectangle(0,0,300,300);
-		fireRing.end();
-		//ofPushStyle();
-    fireTexture.end();
-	// fireRing.draw(0,0);
+			this->face.draw();
+	fireRing.end();
 
-			fireTexture.getTextureReference().bind();
-				this->face.draw();
-			fireTexture.getTextureReference().unbind();
-	//fireRing.end();
+	// fboTexture.begin();
+	// 	fireRing.begin();
+	// 	//ofPopStyle();
+	// 	//ofFill();
+	
+	// 	fireRing.setUniform1f("time",ofGetElapsedTimef());
+	// 	fireRing.setUniform2f("resolution",300,300);
+	// 		ofDrawRectangle(0,0,300,300);
+	// 	fireRing.end();
+	// 	//ofPushStyle();
+    // fboTexture.end();
+	// // fireRing.draw(0,0);
+
+	// 		fboTexture.getTextureReference().bind();
+	// 			this->face.draw();
+	// 		fboTexture.getTextureReference().unbind();
+	// //fireRing.end();
 		
 }
 

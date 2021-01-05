@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "VoidE.h"
-
+#include "ofxDOF.h"
 class ofApp : public ofBaseApp{
 
 	public:
@@ -10,8 +10,9 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
 		void keyPressed(int key);
-
+		ofxDOF depth;
 		ofEasyCam cam;
 		VoidE vacio;
+		int focalDist, focalRange;
 
 };

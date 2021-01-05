@@ -22,10 +22,10 @@ class VoidE{
 		//Firelava\
 
 		ofMesh face;
+		
         //shader 
-        ofxAutoReloadedShader blackShader;
-		ofxAutoReloadedShader fireRing;
-		ofFbo fireTexture;
+        ofxAutoReloadedShader blackShader, fireRing;
+		ofFbo fboTexture;
         ofTexture mtex;
         float time;
 
