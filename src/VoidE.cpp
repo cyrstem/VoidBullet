@@ -2,7 +2,7 @@
 
 void VoidE::init(){
      ofDisableArbTex();
-	 //ofEnableDepthTest();
+	 ofEnableDepthTest();
 	 ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
     ofLoadImage(mtex,"tex.jpg");
 
@@ -49,7 +49,7 @@ void VoidE::update(){
             log.push_back(location_list[location_index]);
             log_list.push_back(log);
             color_list.push_back(ofColor(ofRandom(255,1)));
-            life_list.push_back(170);
+            life_list.push_back(190);
             
         }
 
@@ -75,8 +75,8 @@ void VoidE::update(){
         face.clear();
 
         ofSeedRandom(139);
-        float phi_deg_step =1.5;
-        float theta_deg_step =1.5;
+        float phi_deg_step =1;
+        float theta_deg_step =1;
         for (float radius = 110; radius <= 250; radius += 100) {
  
 		auto noise_seed = ofRandom(500);
@@ -88,7 +88,7 @@ void VoidE::update(){
 					sin(theta_deg * DEG_TO_RAD) * cos(phi_deg * DEG_TO_RAD),
 					sin(theta_deg * DEG_TO_RAD) * sin(phi_deg * DEG_TO_RAD),
 					cos(theta_deg * DEG_TO_RAD));
-				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.021));
+				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.011));
  
 				if (noise_value < 0.5) { continue; }
  
@@ -127,6 +127,13 @@ void VoidE::update(){
 	ofClear(0);
 	fboTexture.end();
 
+
+    lightpos = glm::vec3(sin(ofGetElapsedTimef()/4.18f) * 150 * 0 + 0,
+     sin(ofGetElapsedTimef()/2.8f) * 150 * 2 + 0,
+     -cos(ofGetElapsedTimef()/2.8f) * 150 * 2 + 5);
+
+    light.setPosition(lightpos);
+
 }
 
 void VoidE::draw(){
@@ -137,6 +144,7 @@ void VoidE::draw(){
         blackShader.begin();
         	blackShader.setUniformTexture("tex0",mtex,0);
     		blackShader.setUniform1f("time",time);
+			blackShader.setUniform3f("lightPos",lightpos);
             	vacio.draw();  
         blackShader.end();
 
@@ -165,9 +173,10 @@ void VoidE::draw(){
 	fireRing.begin();
 		fireRing.setUniform1f("time",ofGetElapsedTimef());
 		fireRing.setUniform2f("resolution",300,300);
+		
 			this->face.draw();
 	fireRing.end();
-
+	light.draw();
 	// fboTexture.begin();
 	// 	fireRing.begin();
 	// 	//ofPopStyle();

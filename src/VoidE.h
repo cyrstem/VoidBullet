@@ -29,4 +29,9 @@ class VoidE{
         ofTexture mtex;
         float time;
 
+
+		//lights
+			ofLight light, spot;
+			glm::vec3 lightpos;
+
 };

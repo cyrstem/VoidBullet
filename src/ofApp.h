@@ -14,8 +14,4 @@ class ofApp : public ofBaseApp{
 		ofEasyCam cam;
 		VoidE vacio;
 
-			ofLight light, spot;
-			glm::vec3 lightpos;
-
-
 };
