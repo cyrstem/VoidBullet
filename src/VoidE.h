@@ -25,13 +25,19 @@ class VoidE{
 		
         //shader 
         ofxAutoReloadedShader blackShader, fireRing;
-		ofFbo fboTexture;
         ofTexture mtex;
         float time;
+		ofFbo firemT;
 
 
 		//lights
 			ofLight light, spot;
 			glm::vec3 lightpos;
+			glm::vec3 lightsColor;
+			glm::vec3 meshSpecCol;
+			glm::vec3 meshCol;
+			glm::vec3 ambientCol;
+			float intesity;
+			float blurAmt;
 
 };

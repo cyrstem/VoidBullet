@@ -4,6 +4,8 @@ void VoidE::init(){
      ofDisableArbTex();
 	 ofEnableDepthTest();
 	 ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
+	 ofEnableAlphaBlending();
+	 ofEnableAntiAliasing();
     ofLoadImage(mtex,"tex.jpg");
 
     blackShader.load("void");
@@ -27,15 +29,21 @@ void VoidE::init(){
         location_list.push_back(average);
     }
     time =ofGetElapsedTimef();
-
-
+	
 	ofFboSettings f;
 	f.width =300;
 	f.height =300;
 	f.internalformat =GL_RGBA;
 	f.maxFilter =32;
-	fboTexture.allocate(f);
-	
+	firemT.allocate(f);
+
+
+		lightsColor =glm::vec3 (255.0,0.0,0.0);
+		meshCol = glm::vec3 (255.255,0.0,0.0);
+		meshSpecCol = glm::vec3 (0.0,0.0,1.0);
+		ambientCol =glm::vec3 (0.30,0.30,0.3);
+		intesity = 0.008;
+		    blurAmt =1;
 }
 
 void VoidE::update(){
@@ -65,9 +73,9 @@ void VoidE::update(){
 			continue;
 		}
  
-		auto x = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.x + 360 * 0.005)), 0, 1, -15, 15);
-		auto y = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.y + 360 * 0.005)), 0, 1, -15, 15);
-		auto z = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0065, this->noise_seed.z + 360 * 0.005)), 0, 1, -15, 15);
+		auto x = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0165, this->noise_seed.x + 360 * 0.005)), 0, 1, -15, 15);
+		auto y = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0165, this->noise_seed.y + 360 * 0.005)), 0, 1, -15, 15);
+		auto z = ofMap(ofNoise(glm::vec4(this->log_list[i].back() * 0.0165, this->noise_seed.z + 360 * 0.005)), 0, 1, -15, 15);
 		this->log_list[i].push_back(this->log_list[i].back() + glm::vec3(x, y, z));
 	}
         //firelava
@@ -79,7 +87,7 @@ void VoidE::update(){
         float theta_deg_step =1;
         for (float radius = 110; radius <= 250; radius += 100) {
  
-		auto noise_seed = ofRandom(500);
+		auto noise_seed = ofRandom(1500);
 		for (float phi_deg = 0; phi_deg < 360; phi_deg += phi_deg_step) {
  
 			for (float theta_deg = 0; theta_deg < 360; theta_deg += theta_deg_step) {
@@ -88,7 +96,7 @@ void VoidE::update(){
 					sin(theta_deg * DEG_TO_RAD) * cos(phi_deg * DEG_TO_RAD),
 					sin(theta_deg * DEG_TO_RAD) * sin(phi_deg * DEG_TO_RAD),
 					cos(theta_deg * DEG_TO_RAD));
-				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.011));
+				auto noise_value = ofNoise(glm::vec4(noise_location, noise_seed + ofGetFrameNum() * 0.021));
  
 				if (noise_value < 0.5) { continue; }
  
@@ -123,9 +131,9 @@ void VoidE::update(){
 		}
 	}
 
-	fboTexture.begin();
+	firemT.begin();
 	ofClear(0);
-	fboTexture.end();
+	firemT.end();
 
 
     lightpos = glm::vec3(sin(ofGetElapsedTimef()/4.18f) * 150 * 0 + 0,
@@ -145,6 +153,13 @@ void VoidE::draw(){
         	blackShader.setUniformTexture("tex0",mtex,0);
     		blackShader.setUniform1f("time",time);
 			blackShader.setUniform3f("lightPos",lightpos);
+			//blackShader.setUniform3f("cameraPos", cam.getPosition());
+            blackShader.setUniform3f("lightCol",lightsColor);
+            blackShader.setUniform1f("intensity",intesity);
+            blackShader.setUniform3f("meshSpecCol", meshSpecCol);
+	        blackShader.setUniform3f("meshCol", meshCol);
+            blackShader.setUniform3f("ambientCol", ambientCol);
+			
             	vacio.draw();  
         blackShader.end();
 
@@ -173,10 +188,17 @@ void VoidE::draw(){
 	fireRing.begin();
 		fireRing.setUniform1f("time",ofGetElapsedTimef());
 		fireRing.setUniform2f("resolution",300,300);
-		
+		fireRing.setUniform1f("blurAmnt",0.3);
+		fireRing.setUniformTexture("tex0",firemT.getTexture(),0);
+
 			this->face.draw();
 	fireRing.end();
+
+
+
 	light.draw();
+
+
 	// fboTexture.begin();
 	// 	fireRing.begin();
 	// 	//ofPopStyle();
