@@ -82,7 +82,7 @@ void main ()
 
     
 
-   outputColor= vec4((f*f*f+.4*f*f+.5*f)*color,0.5);
+   outputColor= vec4((f*f*f+.4*f*f+.5*f)*color,0.8);
     
 
 

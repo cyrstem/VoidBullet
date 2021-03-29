@@ -136,9 +136,9 @@ void VoidE::update(){
 	firemT.end();
 
 
-    lightpos = glm::vec3(sin(ofGetElapsedTimef()/4.18f) * 150 * 0 + 0,
-     sin(ofGetElapsedTimef()/2.8f) * 150 * 2 + 0,
-     -cos(ofGetElapsedTimef()/2.8f) * 150 * 2 + 5);
+    lightpos = glm::vec3(cos(ofGetElapsedTimef()/1.18f) * 150 * 0 + 0,
+     sin(ofGetElapsedTimef()/1.8f) * 150 * 2 + 0,
+     -cos(ofGetElapsedTimef()/1.8f) * 150 * 2 + 0);
 
     light.setPosition(lightpos);
 
