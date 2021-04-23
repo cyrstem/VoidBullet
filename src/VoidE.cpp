@@ -10,6 +10,7 @@ void VoidE::init(){
 
     blackShader.load("void");
 	fireRing.load("Fire");
+	phong.load("phong");
 
     //void sphere
     vacio.setPosition(0,0,0);
@@ -38,12 +39,11 @@ void VoidE::init(){
 	firemT.allocate(f);
 
 
-		lightsColor =glm::vec3 (255.0,0.0,0.0);
+		lightsColor =glm::vec3 (255.,0.0,0.0);
 		meshCol = glm::vec3 (255.255,0.0,0.0);
-		meshSpecCol = glm::vec3 (0.0,0.0,1.0);
-		ambientCol =glm::vec3 (0.30,0.30,0.3);
-		intesity = 0.008;
-		    blurAmt =1;
+		meshSpecCol = glm::vec3 (255.0,0.0,1.0);
+		ambientCol =glm::vec3 (255.,255.,255.);
+		intesity = 0.003;
 }
 
 void VoidE::update(){
@@ -150,22 +150,20 @@ void VoidE::draw(){
  //shader
 
         blackShader.begin();
-        	blackShader.setUniformTexture("tex0",mtex,0);
-    		blackShader.setUniform1f("time",time);
-			blackShader.setUniform3f("lightPos",lightpos);
-			//blackShader.setUniform3f("cameraPos", cam.getPosition());
-            blackShader.setUniform3f("lightCol",lightsColor);
-            blackShader.setUniform1f("intensity",intesity);
-            blackShader.setUniform3f("meshSpecCol", meshSpecCol);
-	        blackShader.setUniform3f("meshCol", meshCol);
-            blackShader.setUniform3f("ambientCol", ambientCol);
-			
-            	vacio.draw();  
+        blackShader.setUniformTexture("tex0",mtex,0);
+    	blackShader.setUniform1f("time",time);
+		blackShader.setUniform3f("lightPos",lightpos);
+        blackShader.setUniform3f("lightCol",lightsColor);
+        blackShader.setUniform1f("intensity",intesity);
+        blackShader.setUniform3f("meshSpecCol", meshSpecCol);
+	    blackShader.setUniform3f("meshCol", meshCol);
+        blackShader.setUniform3f("ambientCol", ambientCol);	
+        	vacio.draw(); 
         blackShader.end();
 
-	fireRing.begin();
-		fireRing.setUniform1f("time",ofGetElapsedTimef());
-	 	fireRing.setUniform2f("resolution",300,300);
+	// fireRing.begin();
+	// 	fireRing.setUniform1f("time",ofGetElapsedTimef());
+	//  	fireRing.setUniform2f("resolution",300,300);
         for (int i = 0; i < this->log_list.size(); i++) {
  
 		ofSetColor(this->color_list[i]);
@@ -181,18 +179,19 @@ void VoidE::draw(){
 		ofEndShape();
 	}
 
-	fireRing.end();
+	//
+	//fireRing.end();
 
 
-///check how to render fbo to a texture or image and thenn pass to the shaderr
-	fireRing.begin();
-		fireRing.setUniform1f("time",ofGetElapsedTimef());
-		fireRing.setUniform2f("resolution",300,300);
-		fireRing.setUniform1f("blurAmnt",0.3);
-		fireRing.setUniformTexture("tex0",firemT.getTexture(),0);
+// ///check how to render fbo to a texture or image and thenn pass to the shaderr
+// 	fireRing.begin();
+// 		fireRing.setUniform1f("time",ofGetElapsedTimef());
+// 		fireRing.setUniform2f("resolution",300,300);
+// 		fireRing.setUniform1f("blurAmnt",0.3);
+// 		fireRing.setUniformTexture("tex0",firemT.getTexture(),0);
 
-			this->face.draw();
-	fireRing.end();
+// 			this->face.draw();
+// 	fireRing.end();
 
 
 

@@ -24,7 +24,7 @@ class VoidE{
 		ofMesh face;
 		
         //shader 
-        ofxAutoReloadedShader blackShader, fireRing;
+        ofxAutoReloadedShader blackShader, fireRing, phong;
         ofTexture mtex;
         float time;
 		ofFbo firemT;
@@ -38,6 +38,4 @@ class VoidE{
 			glm::vec3 meshCol;
 			glm::vec3 ambientCol;
 			float intesity;
-			float blurAmt;
-
 };

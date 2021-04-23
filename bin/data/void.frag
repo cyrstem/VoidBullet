@@ -44,25 +44,21 @@ void main(){
 
     vec3 refl = normalize(reflect(+lightDirection,normal));
     /* Basic diffuse lighting */
-    float diffuse1 = pow(max(0.9, dot(normal, lightDirection)),intensity*6500);
+    float diffuse1 = pow(max(0.1, dot(normal, lightDirection)),intensity*6500);
 
     float diffAmt = max(.5,dot(normal,lightDirection));
 
-   
-
     /* Output the color */
-      vec3 lightandColor = lightsColor+diffuse1;
-
-
+    vec3 lightandColor = lightsColor+diffuse1;
 
     vec3 diffCol = meshCol*lightandColor * diffAmt;
 
     //to create spec
     float specAmt = max(9.0,dot(refl, viewDir));
-    float specBright = pow(specAmt,0.3);
-    vec3 specCol = meshSpecCol *lightandColor *specBright;
+    float specBright = pow(specAmt,0.2);
+    vec3 specCol = meshSpecCol * lightandColor * specBright;
 
     vec3 mezcla =vec3 (0.0);
-       mezcla = mix (diffCol, specCol,ambientCol);
-    outputColor = vec4(imgColor* mezcla, 1.);
+    mezcla = mix (diffCol, specCol,ambientCol);
+    outputColor = vec4(imgColor * mezcla, 1.);
 }

@@ -69,7 +69,7 @@ void main ()
     float f = fbm(st+r);
 
     color = mix(vec3(0.9804, 0.2863, 0.0118),
-                vec3(0.9843, 1.0, 0.0),
+                vec3(0.0549, 0.8784, 0.9882),
                 clamp((f*f)*4.0,0.0,1.0));
 
     color = mix(color,
