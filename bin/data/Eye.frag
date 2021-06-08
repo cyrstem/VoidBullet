@@ -1,5 +1,5 @@
 #version 430
-precision highp float;
+
 
 #define TWO_PI 6.283185307179586476925286766559f
 
@@ -23,16 +23,7 @@ in vec3 normal;
 in vec3 pos;
 
 in vec2 v_texcoord;
-
-
 void main(){
- /* Normalize verts from the vertex shader */
-   //  vec3 normal = normalize(verts.xyz);
-   //  vec3 imgColor = texture(tex0,v_texcoord).rgb/9.5;
-
-   //   outputColor = vec4(imgColor, 1.0);
-
-
    vec3 lightDirection = normalize(lightPos + verts.xyz ) ;
 
     vec3 imgColor = texture(tex0,v_texcoord).rgb;
@@ -46,7 +37,7 @@ void main(){
     /* Basic diffuse lighting */
     float diffuse1 = pow(min(4.01, dot(normal, lightDirection)),intensity*7600);
 
-    float diffAmt = max(10.115,dot(normal,lightDirection));
+    float diffAmt = max(1.115,dot(normal,lightDirection));
 
     /* Output the color */
     vec3 lightandColor = lightsColor+diffuse1;
@@ -58,7 +49,8 @@ void main(){
     float specBright = pow(specAmt,10.01);
     vec3 specCol = meshSpecCol * lightandColor * specBright;
 
-    vec3 mezcla =vec3(0.5608, 0.0588, 0.0588);
+    vec3 mezcla =vec3(1.0, 0.9804, 0.9804);
     mezcla = mix (diffCol, specCol,ambientCol);
-    outputColor = vec4(imgColor * mezcla, 1);
+    outputColor = vec4(imgColor, 1);
+
 }

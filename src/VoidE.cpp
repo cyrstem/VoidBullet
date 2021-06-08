@@ -8,9 +8,9 @@ void VoidE::init(){
 	 ofEnableAntiAliasing();
     ofLoadImage(mtex,"tex.jpg");
 
-    blackShader.load("void");
-	fireRing.load("Fire");
-	phong.load("phong");
+    blackShader.load("Eye");
+	//fireRing.load("Fire");
+
 
     //void sphere
     vacio.setPosition(0,0,0);
@@ -161,9 +161,9 @@ void VoidE::draw(){
         	vacio.draw(); 
         blackShader.end();
 
-	// fireRing.begin();
-	// 	fireRing.setUniform1f("time",ofGetElapsedTimef());
-	//  	fireRing.setUniform2f("resolution",300,300);
+	fireRing.begin();
+		fireRing.setUniform1f("time",ofGetElapsedTimef());
+	 	fireRing.setUniform2f("resolution",300,300);
         for (int i = 0; i < this->log_list.size(); i++) {
  
 		ofSetColor(this->color_list[i]);
@@ -180,7 +180,7 @@ void VoidE::draw(){
 	}
 
 	//
-	//fireRing.end();
+	fireRing.end();
 
 
 // ///check how to render fbo to a texture or image and thenn pass to the shaderr
